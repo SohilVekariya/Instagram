@@ -10,27 +10,25 @@ import CustomButton from "../../components/shared/CustomButton";
 import LoginFooter from "../../components/shared/LoginFooter";
 
 const Login = () => {
-  const [input, setInput] = useState("");
-
-  const handleInputeChange = (event: any) => {
-    setInput(event.target.value);
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
   return (
-    <div className="flex justify-center mt-12">
-      <div className="md:block hidden">
+    <div className="flex justify-center am:mt-12">
+      <div className="lg:block hidden">
         <img src={instaLoginPic} alt="" width="500px" />
       </div>
       <div className="container-fluid">
-        <div className="login_content sm:border-2  mx-auto mt-5 px-12">
+        <div className="login_content sm:border-2  mx-auto mt-5 sm:px-12">
           <img src={instaLogo} alt="" width={250} className="mx-auto my-7" />
           <div className="text-center">
             <CustomInput
               label="Phone number,username, or email"
               placeholder=""
               name="email"
-              onChange=""
+              onChange={(e:any) => {setEmail(e.target.value)}}
               type="text"
-              value={input}
+              value={email}
               disabled={false}
               className=""
             />
@@ -40,9 +38,10 @@ const Login = () => {
               label="Password"
               placeholder=""
               name="Password"
-              onChange={handleInputeChange}
+              onChange={(e:any) => {setPassword(e.target.value)}
+              }
               type="password"
-              value={input}
+              value={password}
               disabled={false}
               className=""
             />
@@ -52,7 +51,6 @@ const Login = () => {
               type="submit"
               title="Log in"
               className="custom_signin_btn"
-              clickHandler={handleInputeChange}
               route=""
             />
           </div>
@@ -78,7 +76,6 @@ const Login = () => {
               type="button"
               title="Sign Up"
               className="text-sky-500 font-semibold"
-              clickHandler=""
               route="/signup"
             />
             {/* <span className="text-sky-500 font-semibold">Sign up</span> */}
@@ -92,10 +89,9 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <div className="mb-5">
-
+      <div className="mb-12">
       </div>
-      <div className="md:hidden fixed bottom-0 text-center w-full ">
+      <div className="md:hidden absolute bottom-0 text-center w-full ">
         <LoginFooter />
       </div>
     </div>

@@ -8,15 +8,17 @@ import appStore from "../../assets/images/app.png";
 import CustomButton from "../../components/shared/CustomButton";
 
 const SignUp = () => {
-  const [input, setInput] = useState("");
+  const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleInputeChange = (event: any) => {
-    setInput(event.target.value);
-  };
+
+
   return (
     <div className="flex justify-center mt-12">
       <div className="container-fluid">
-        <div className="login_content sm:border-2  mx-auto mt-5 px-12">
+        <div className="login_content sm:border-2  mx-auto mt-5 px-">
           <img
             src={instaLogo}
             alt=""
@@ -31,7 +33,6 @@ const SignUp = () => {
               type="button"
               title="Login in with Facebook"
               className="custom_signin_btn"
-              clickHandler=""
               route=""
             />
           </div>
@@ -45,9 +46,9 @@ const SignUp = () => {
               label="Mobile Number or email"
               placeholder=""
               name="email"
-              onChange=""
+              onChange={(e:any) => {setEmail(e.target.value)}}
               type="text"
-              value={input}
+              value={email}
               disabled={false}
               className=""
             />
@@ -57,9 +58,9 @@ const SignUp = () => {
               label="FullName"
               placeholder=""
               name="FullName"
-              onChange=""
+              onChange={(e:any) => {setFullName(e.target.value)}}
               type="text"
-              value={input}
+              value={fullName}
               disabled={false}
               className=""
             />
@@ -69,9 +70,9 @@ const SignUp = () => {
               label="Username"
               placeholder=""
               name="Username"
-              onChange=""
+              onChange={(e:any) => {setUserName(e.target.value)}}
               type="text"
-              value={input}
+              value={userName}
               disabled={false}
               className=""
             />
@@ -81,25 +82,24 @@ const SignUp = () => {
               label="Password"
               placeholder=""
               name="Password"
-              onChange=""
+              onChange={(e:any) => {setPassword(e.target.value)}}
               type="password"
-              value={input}
+              value={password}
               disabled={false}
               className=""
             />
           </div>
-          <div className="py-4">
-            People who use our service may have uploaded your contact information to Instagram <span>Learn More</span>
+          <div className="py-4 text-gray-400">
+            People who use our service may have uploaded your contact information to Instagram <span className="text-slate-900">Learn More</span>
           </div>
-          <div className="py-4">
-            By signing up,you agree to our <span>Terms , Privacy Policy</span> and <span>Cookies Policy</span>
+          <div className="py-4 text-gray-400">
+            By signing up,you agree to our <span className="text-slate-900">Terms , Privacy Policy</span> and <span className="text-slate-900">Cookies Policy</span>
           </div>
           <div className="flex justify-center mt-2 mb-12">
             <CustomButton
               type="submit"
               title="Sign Up"
               className="custom_signin_btn"
-              clickHandler=""
               route=""
             />
           </div>
@@ -111,7 +111,6 @@ const SignUp = () => {
               type="button"
               title="Log in"
               className="text-sky-500 font-semibold"
-              clickHandler=""
               route="/"
             />
           </div>

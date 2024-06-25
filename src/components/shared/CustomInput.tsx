@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React from 'react';
+import { forwardRef } from 'react';
 
 
 type CustomInputProps = {
@@ -14,7 +14,7 @@ type CustomInputProps = {
 }
 
 
-const CustomInput =({
+const CustomInput =forwardRef(({
     label,
     placeholder,
     name,
@@ -36,8 +36,9 @@ const CustomInput =({
         value={value}
         disabled={disabled} 
         variant="outlined"
-        style={{width:300}}/>
+        style={{width:300}}
+        />
   )
-}
+})
 
 export default CustomInput
