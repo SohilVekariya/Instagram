@@ -1,17 +1,17 @@
-import { useState } from "react";
 import "./App.css";
-import CustomInput from './components/shared/CustomInput'
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/login/Login";
-import React from 'react'
 import SignUp from "./pages/sign-up/SignUp";
+import { AllRoutes } from "./constants/Routes";
+import Reset from "./pages/Reset/Reset";
 
 const App = () => {
   return (
     <>
     <Routes>
-        <Route path="/" element={<Login />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
+        <Route path={AllRoutes.Login} element={<Login />}></Route>
+        <Route path={AllRoutes.SignUp} element={<SignUp />}></Route>
+        <Route path={AllRoutes.Reset} element={<Reset />}></Route>
     </Routes>
     </>
   )

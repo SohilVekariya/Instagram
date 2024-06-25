@@ -1,24 +1,44 @@
-import React, { useState } from "react";
 import "../login/login.css";
 import CustomInput from "../../components/shared/CustomInput";
 import instaLogo from "../../assets/images/logoinsta.png";
-import fbLogo from "../../assets/images/fb.png";
 import playStore from "../../assets/images/play.png";
 import appStore from "../../assets/images/app.png";
 import CustomButton from "../../components/shared/CustomButton";
+import { useForm } from "react-hook-form";
+import { AllRoutes } from "../../constants/Routes";
+import LoginFooter from "../../components/shared/LoginFooter";
+import { useState } from "react";
+
+type FormInputs = {
+  name: string
+  userName:string
+  email: string
+  password: string
+}
 
 const SignUp = () => {
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const {register,control, handleSubmit, formState: {errors,isValid}} = useForm<FormInputs>({mode:'onChange'});
 
+  const [passwordLength, setPasswordLength] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordLength(event.target.value.length);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const onSubmit = (data: FormInputs) => {
+    console.log(data); // Handle form submission
+};
 
   return (
-    <div className="flex justify-center mt-12">
-      <div className="container-fluid">
-        <div className="login_content sm:border-2  mx-auto mt-5 px-">
+    <>
+    <div className="flex justify-center sm:mt-12">
+      <form className="container-fluid" onSubmit={handleSubmit(onSubmit)}>
+        <div className="login_content sm:border-2  mx-auto sm:px-12">
           <img
             src={instaLogo}
             alt=""
@@ -45,55 +65,62 @@ const SignUp = () => {
             <CustomInput
               label="Mobile Number or email"
               placeholder=""
-              name="email"
-              onChange={(e:any) => {setEmail(e.target.value)}}
+              control={control}
               type="text"
-              value={email}
-              disabled={false}
               className=""
+              {...register("email", { required: true, pattern: /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9})$/})}
             />
           </div>
           <div className="text-center mt-2">
             <CustomInput
               label="FullName"
               placeholder=""
-              name="FullName"
-              onChange={(e:any) => {setFullName(e.target.value)}}
+              control={control}
               type="text"
-              value={fullName}
-              disabled={false}
               className=""
+              {...register("name", { required: false, pattern:/^(?!.*\s.*\s)[a-z ]{3,20}$/ })}
             />
           </div>
           <div className="text-center mt-2">
             <CustomInput
               label="Username"
               placeholder=""
-              name="Username"
-              onChange={(e:any) => {setUserName(e.target.value)}}
+              control={control}
               type="text"
-              value={userName}
-              disabled={false}
               className=""
+              {...register("userName", { required: true, pattern:/^[a-z][a-z0-9_]{4,19}/})}
+
             />
           </div>
+          {/* <div className="text-left ps-12">
+            {errors.userName && <span className="text-red-500">username length is between 3 to 20 characters and does not contain space</span>}
+          </div> */}
           <div className="text-center mt-2">
             <CustomInput
               label="Password"
               placeholder=""
-              name="Password"
-              onChange={(e:any) => {setPassword(e.target.value)}}
+              control={control}
+              onKeyUp={handlePasswordChange}
               type="password"
-              value={password}
-              disabled={false}
               className=""
+              {...register("password", { required: true, pattern:/^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*\W).{7,15}$/ })}
+
             />
+            {passwordLength > 0 && (
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="password-toggle-btn absolute right-3 top-4"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            )}
           </div>
           <div className="py-4 text-gray-400">
-            People who use our service may have uploaded your contact information to Instagram <span className="text-slate-900">Learn More</span>
+            People who use our service may have uploaded your contact information to Instagram <a href="https://www.facebook.com/help/instagram/261704639352628" className="text-slate-900">Learn More</a>
           </div>
           <div className="py-4 text-gray-400">
-            By signing up,you agree to our <span className="text-slate-900">Terms , Privacy Policy</span> and <span className="text-slate-900">Cookies Policy</span>
+            By signing up,you agree to our <a href="https://help.instagram.com/581066165581870/?locale=en_US" className="text-slate-900">Terms , </a><a href="https://help.instagram.com/581066165581870/?locale=en_US" className="text-slate-900">Privacy Policy</a> and <a href="https://privacycenter.instagram.com/policies/cookies/" className="text-slate-900">Cookies Policy</a>
           </div>
           <div className="flex justify-center mt-2 mb-12">
             <CustomButton
@@ -101,6 +128,7 @@ const SignUp = () => {
               title="Sign Up"
               className="custom_signin_btn"
               route=""
+              disable={!isValid }
             />
           </div>
         </div>
@@ -111,19 +139,25 @@ const SignUp = () => {
               type="button"
               title="Log in"
               className="text-sky-500 font-semibold"
-              route="/"
+              route={AllRoutes.Login}
             />
           </div>
         </div>
-        <div className="text-center mt-2 mb-10">
+        <div className="text-center mt-2 pb-5">
           <div className="py-3">Get the app</div>
           <div className="flex justify-center gap-2">
             <img src={playStore} width="150px" />
             <img src={appStore} width="150px" />
           </div>
         </div>
-      </div>
+      </form>
     </div>
+    <div className="mb-12 "></div>
+      <div>
+        <LoginFooter />
+      </div>
+    </>
+    
   );
 };
 

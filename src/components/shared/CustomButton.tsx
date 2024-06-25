@@ -5,6 +5,7 @@ type CustomButtonProps = {
   clickHandler?: any | null;
   route: string;
   className: string;
+  disable?: boolean;
 };
 const CustomButton = ({
   type = "button",
@@ -12,9 +13,10 @@ const CustomButton = ({
   clickHandler,
   route,
   className = "",
+  disable = false,
 } : CustomButtonProps) => {
   return (
-    <button  type={type} className={className} onClick={clickHandler ?? null}>
+    <button  type={type} className={className} onClick={clickHandler ?? null} disabled={disable}>
       {route ? <Link to={route}>{title}</Link> : <span>{title}</span>}
     </button>
   );

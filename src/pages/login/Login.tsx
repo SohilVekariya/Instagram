@@ -1,5 +1,4 @@
 import "./login.css";
-import { useState } from "react";
 import CustomInput from "../../components/shared/CustomInput";
 import instaLoginPic from "../../assets/images/insta.svg";
 import instaLogo from "../../assets/images/logoinsta.png";
@@ -8,50 +7,92 @@ import playStore from "../../assets/images/play.png";
 import appStore from "../../assets/images/app.png";
 import CustomButton from "../../components/shared/CustomButton";
 import LoginFooter from "../../components/shared/LoginFooter";
+import { useForm } from "react-hook-form";
+import { AllRoutes } from "../../constants/Routes";
+import { useState } from "react";
+
+type FormInputs = {
+  email: string;
+  password: string;
+};
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<FormInputs>({ mode: "onChange" });
+
+  const [passwordLength, setPasswordLength] = useState(0);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordLength(event.target.value.length);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const onSubmit = (data: FormInputs) => {
+    console.log(data); // Handle form submission
+  };
   return (
-    <div className="flex justify-center am:mt-12">
+    <div className="flex justify-center sm:mt-12">
       <div className="lg:block hidden">
         <img src={instaLoginPic} alt="" width="500px" />
       </div>
-      <div className="container-fluid">
+      <form className="container-fluid" onSubmit={handleSubmit(onSubmit)}>
         <div className="login_content sm:border-2  mx-auto mt-5 sm:px-12">
           <img src={instaLogo} alt="" width={250} className="mx-auto my-7" />
           <div className="text-center">
             <CustomInput
               label="Phone number,username, or email"
-              placeholder=""
-              name="email"
-              onChange={(e:any) => {setEmail(e.target.value)}}
+              placeholder="Phone number,username, or email"
+              // name="email"
               type="text"
-              value={email}
-              disabled={false}
+              control={control}
               className=""
+              {...register("email", {
+                required: true,
+                pattern:
+                  /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
+              })}
             />
           </div>
-          <div className="text-center mt-2">
+
+          <div className="text-center mt-2 relative">
             <CustomInput
               label="Password"
               placeholder=""
-              name="Password"
-              onChange={(e:any) => {setPassword(e.target.value)}
-              }
-              type="password"
-              value={password}
-              disabled={false}
+              type={showPassword ? "text" : "password"}
+              control={control}
+              onKeyUp={handlePasswordChange}
               className=""
+              {...register("password", {
+                required: true,
+                pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*\W).{7,15}$/,
+              })}
             />
+            {passwordLength > 0 && (
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="password-toggle-btn absolute right-3 top-4"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            )}
           </div>
+
           <div className="flex justify-center mt-2">
             <CustomButton
               type="submit"
               title="Log in"
               className="custom_signin_btn"
               route=""
+              disable={!isValid}
             />
           </div>
 
@@ -67,7 +108,12 @@ const Login = () => {
             </div>
             <div className="align-middle">Log in with Facebook</div>
           </div>
-          <div className="login_forgt text-center my-7"> Forgot password?</div>
+          <CustomButton
+            type="button"
+            title="Forgot password?"
+            className="login_forgt text-center my-7"
+            route={AllRoutes.Reset}
+          />
         </div>
         <div className="singup_link_content sm:border-2 mx-auto text-center mt-3 py-7">
           <div>
@@ -76,22 +122,20 @@ const Login = () => {
               type="button"
               title="Sign Up"
               className="text-sky-500 font-semibold"
-              route="/signup"
+              route={AllRoutes.SignUp}
             />
-            {/* <span className="text-sky-500 font-semibold">Sign up</span> */}
           </div>
         </div>
-        <div className="text-center mt-2 mb">
+        <div className="text-center mt-2">
           <div className="py-3">Get the app</div>
           <div className="flex justify-center gap-2">
             <img src={playStore} width="150px" />
             <img src={appStore} width="150px" />
           </div>
         </div>
-      </div>
-      <div className="mb-12">
-      </div>
-      <div className="md:hidden absolute bottom-0 text-center w-full ">
+      </form>
+      <div className="mb-12"></div>
+      <div className="absolute bottom-0">
         <LoginFooter />
       </div>
     </div>

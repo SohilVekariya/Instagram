@@ -1,5 +1,6 @@
 export const AllRoutes = {
-    Home: "/",
+    // Home: "/",
+    Login: "/",
     SignUp: "/signup",
-    Login: "/login",
+    Reset: "/reset"
   };

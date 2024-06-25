@@ -1,5 +1,6 @@
 import TextField from '@mui/material/TextField';
 import { forwardRef } from 'react';
+import { useController } from 'react-hook-form';
 
 
 type CustomInputProps = {
@@ -7,10 +8,10 @@ type CustomInputProps = {
     placeholder: string
     name: string
     type: string
-    value: string | any
-    onChange: any
-    disabled: boolean
+    disabled?: boolean
     className: string
+    control: any
+    onKeyUp?:any
 }
 
 
@@ -19,17 +20,24 @@ const CustomInput =forwardRef(({
     placeholder,
     name,
     type = "text",
-    value,
-    onChange,
     disabled = false,
-    className = ''
-} : CustomInputProps) => {
+    className = '',
+    onKeyUp,
+    control
+} : CustomInputProps,ref) => {
+  const{
+    field: {value, onChange},
+    fieldState : {error}
+  } = useController({
+    name,
+    control,
+    defaultValue:''
+  })
   return (
       <TextField type={type}
         label={label}
         name={name}
         id={name}
-        required
         placeholder={placeholder}
         className={`${className}`}
         onChange={onChange}
@@ -37,6 +45,10 @@ const CustomInput =forwardRef(({
         disabled={disabled} 
         variant="outlined"
         style={{width:300}}
+        error={!!error} 
+        helperText={error?.message}
+        inputRef={ref}
+        onKeyUp={onKeyUp}
         />
   )
 })
