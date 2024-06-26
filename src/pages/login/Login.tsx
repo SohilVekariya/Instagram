@@ -60,6 +60,9 @@ const Login = () => {
                   /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
               })}
             />
+            {errors.email  && (
+            <p className="text-left text-rose-500" role="alert">Invalid Mobile Number,userName or email</p>
+          )}
           </div>
 
           <div className="text-center mt-2 relative">
@@ -75,6 +78,9 @@ const Login = () => {
                 pattern: /^(?=.*[A-Z])(?=.*\d)(?=.*[a-z])(?=.*\W).{7,15}$/,
               })}
             />
+            {errors.password  && (
+            <p className="text-left text-rose-500" role="alert">Invalid Password</p>
+          )}
             {passwordLength > 0 && (
               <button
                 type="button"
