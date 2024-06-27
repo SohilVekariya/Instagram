@@ -49,7 +49,7 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
       className="login_content sm:border-2  mx-auto sm:px-12"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <img src={instaLogo} alt="" width={250} className="mx-auto mt-10 mb-5" />
+      <img src={instaLogo} alt="" width={250} className="mx-auto mt-10 mb-5" draggable="false" />
       <div className="text-neutral-400 font-bold font-size text-xl text-center mb-4 ">
         Sign up To See photos and Videos from your Friends.
       </div>

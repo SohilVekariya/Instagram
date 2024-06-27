@@ -66,8 +66,8 @@ const SignUp = () => {
         <div className="text-center mt-2 pb-5">
           <div className="py-3">Get the app</div>
           <div className="flex justify-center gap-2">
-            <img src={playStore} width="150px" />
-            <img src={appStore} width="150px" />
+            <img src={playStore} width="150px" draggable="false"/>
+            <img src={appStore} width="150px" draggable="false"/>
           </div>
         </div>
       </div>

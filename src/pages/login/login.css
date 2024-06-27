@@ -52,10 +52,3 @@
     background-color: #0395F6;
     color: white;
 }
-
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input:focus {
-    outline:crimson !important;
-}
-.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
-    outline-color: rgb(255, 0, 98) !important;
-}

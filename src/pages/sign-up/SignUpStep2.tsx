@@ -70,7 +70,7 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="flex justify-center pt-7 pb-4 ">
-        <img src={birthdayLogo} alt="" width={250} className="mx-auto" />
+        <img src={birthdayLogo} alt="" width={250} className="mx-auto" draggable="false" />
       </div>
       <div className="text-black font-semibold text-lg mb-3">
         Add Your Birthday

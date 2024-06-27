@@ -43,7 +43,9 @@ const Reset = () => {
               className=""
               {...register("email", { required: true, pattern: /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/})}
             />
-            {/* {errors.exampleRequired && <span className="error-message"></span>} */}
+            {errors.email  && (
+            <p className="text-left text-rose-500" role="alert">Invalid name</p>
+          )}
           </div>
           <div className="flex justify-center mt-2">
             <CustomButton

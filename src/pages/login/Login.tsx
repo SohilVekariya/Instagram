@@ -10,18 +10,25 @@ import LoginFooter from "../../components/shared/LoginFooter";
 import { useForm } from "react-hook-form";
 import { AllRoutes } from "../../constants/Routes";
 import { useState } from "react";
+import { ColorRing } from "react-loader-spinner";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/slices/AuthSlice";
+import { useNavigate } from "react-router-dom";
 
-type FormInputs = {
-  email: string;
+
+export type FormInputs = {
+  value: string;
   password: string;
 };
 
 const Login = () => {
+  const disPatch = useDispatch<any>();
+  const navigate = useNavigate();
   const {
     register,
     control,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid,isSubmitting },
   } = useForm<FormInputs>({ mode: "onChange" });
 
   const [passwordLength, setPasswordLength] = useState(0);
@@ -35,17 +42,26 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
-  const onSubmit = (data: FormInputs) => {
-    console.log(data); // Handle form submission
+  const onSubmit = async (data:object) => {
+    try{
+      const res = await disPatch(login(data));
+      if (res.success) {
+        navigate(AllRoutes.Home);
+      }
+    }
+    catch (error) {
+      console.error(console.log(error));
+    }
+      
   };
   return (
     <div className="flex justify-center sm:mt-12">
       <div className="lg:block hidden">
-        <img src={instaLoginPic} alt="" width="500px" />
+        <img src={instaLoginPic} alt="" width="500px" draggable="false" />
       </div>
       <form className="container-fluid" onSubmit={handleSubmit(onSubmit)}>
         <div className="login_content sm:border-2  mx-auto mt-5 sm:px-12">
-          <img src={instaLogo} alt="" width={250} className="mx-auto my-7" />
+          <img src={instaLogo} alt="" width={250} className="mx-auto my-7" draggable="false" />
           <div className="text-center">
             <CustomInput
               label="Phone number,username, or email"
@@ -54,13 +70,13 @@ const Login = () => {
               type="text"
               control={control}
               className=""
-              {...register("email", {
+              {...register("value", {
                 required: true,
                 pattern:
                   /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
               })}
             />
-            {errors.email  && (
+            {errors.value  && (
             <p className="text-left text-rose-500" role="alert">Invalid Mobile Number,userName or email</p>
           )}
           </div>
@@ -93,11 +109,19 @@ const Login = () => {
           </div>
 
           <div className="flex justify-center mt-2">
+            
             <CustomButton
               type="submit"
-              title="Log in"
+              title={isSubmitting ? <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                />: "Sign In"}
               className="custom_signin_btn"
-              route=""
               disable={!isValid}
             />
           </div>
@@ -135,8 +159,8 @@ const Login = () => {
         <div className="text-center mt-2">
           <div className="py-3">Get the app</div>
           <div className="flex justify-center gap-2">
-            <img src={playStore} width="150px" />
-            <img src={appStore} width="150px" />
+            <img src={playStore} width="150px" draggable="false"/>
+            <img src={appStore} width="150px" draggable="false"/>
           </div>
         </div>
       </form>

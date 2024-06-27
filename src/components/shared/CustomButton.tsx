@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 type CustomButtonProps = {
   type: "button" | "submit" | "reset";
-  title: string;
+  title: string | any ;
   clickHandler?: any | null;
-  route: string;
+  route?: string;
   className: string;
   disable?: boolean;
 };
