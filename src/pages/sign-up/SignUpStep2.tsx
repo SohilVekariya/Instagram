@@ -1,25 +1,31 @@
 import "../login/login.css";
 import CustomButton from "../../components/shared/CustomButton";
-import { IoLockClosed } from "react-icons/io5";
-import { useForm } from "react-hook-form";
+import { useForm,SubmitHandler, FieldValues } from "react-hook-form";
 import birthdayLogo from "../../assets/images/birthdayLogo.png";
 import { useState } from "react";
 
 type SignUpStep2Props = {
-  prevStep: any;
-  formData: Object;
+  prevStep: () => void;
+  formData: object;
 };
+
+interface FormData {
+  month: string;
+  date: string;
+  year: string;
+}
+
 
 const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { isValid },
   } = useForm();
 
 
-  const onSubmit = (data: any) => {
-    const { year, month, date } = data;
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    const { year, month, date } = data as FormData;
     const formattedData = {
       dateOfBirth: `${year}-${month}-${date}`
     };
@@ -52,16 +58,16 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
 
   const days = getDaysInMonth(month, year);
 
-  const handleMonthChange = (event: any) => {
-    setMonth(event.target.value);
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setMonth(parseInt(event.target.value));
   };
 
-  const handleDateChange = (event: any) => {
-    setDate(event.target.value);
+  const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setDate(parseInt(event.target.value));
   };
 
-  const handleYearChange = (event: any) => {
-    setYear(event.target.value);
+  const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setYear(parseInt(event.target.value));
   };
 
   return (

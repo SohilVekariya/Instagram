@@ -6,14 +6,15 @@ import fbLogo from "../../assets/images/fb.png";
 import playStore from "../../assets/images/play.png";
 import appStore from "../../assets/images/app.png";
 import CustomButton from "../../components/shared/CustomButton";
-import LoginFooter from "../../components/shared/LoginFooter";
 import { useForm } from "react-hook-form";
 import { AllRoutes } from "../../constants/Routes";
 import { useState } from "react";
 import { ColorRing } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/slices/AuthSlice";
+import {  login } from "../../redux/slices/AuthSlice";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../redux/store";
+import LoginFooter from "../../components/shared/LoginFooter";
 
 
 export type FormInputs = {
@@ -22,8 +23,9 @@ export type FormInputs = {
 };
 
 const Login = () => {
-  const disPatch = useDispatch<any>();
+  const disPatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
+
   const {
     register,
     control,
@@ -45,7 +47,7 @@ const Login = () => {
   const onSubmit = async (data:object) => {
     try{
       const res = await disPatch(login(data));
-      if (res.success) {
+      if (res.payload) {
         navigate(AllRoutes.Home);
       }
     }
@@ -55,8 +57,8 @@ const Login = () => {
       
   };
   return (
-    <div className="flex justify-center sm:mt-12">
-      <div className="lg:block hidden">
+    <div className="flex justify-center sm:mt-12 ">
+      <div className="lg:block hidden ">
         <img src={instaLoginPic} alt="" width="500px" draggable="false" />
       </div>
       <form className="container-fluid" onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +75,7 @@ const Login = () => {
               {...register("value", {
                 required: true,
                 pattern:
-                  /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
+                  /^(?:[\w\-.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
               })}
             />
             {errors.value  && (
@@ -126,6 +128,10 @@ const Login = () => {
             />
           </div>
 
+          {/* {error && (
+            <div className="alert text-rose-500"></div>
+          )} */}
+
           <div className="login__ordiv">
             <div className="login__dividor"></div>
             <div className="login__or">OR</div>
@@ -159,13 +165,17 @@ const Login = () => {
         <div className="text-center mt-2">
           <div className="py-3">Get the app</div>
           <div className="flex justify-center gap-2">
-            <img src={playStore} width="150px" draggable="false"/>
-            <img src={appStore} width="150px" draggable="false"/>
+            <a href="https://play.google.com/store/search?q=instagram&c=apps&hl=en">
+              <img src={playStore} width="150px" draggable="false"/>
+            </a>
+            <a href="https://apps.apple.com/in/app/instagram/id389801252">
+              <img src={appStore} width="150px" draggable="false"/>
+            </a>
           </div>
         </div>
       </form>
-      <div className="mb-12"></div>
-      <div className="absolute bottom-0">
+      <div className="mb-12 "></div>
+      <div className="absolute bottom-0  ">
         <LoginFooter />
       </div>
     </div>

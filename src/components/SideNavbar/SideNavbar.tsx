@@ -1,4 +1,3 @@
-import React from 'react'
 import instaLogo from "../../assets/images/Instagram_logo.svg"
 
 export const SideNavbar = () => {

@@ -94,7 +94,7 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
           value={formData.name}
           {...register("name", {
             required: false,
-            pattern: /^(?!.*\s.*\s)[a-z ]{3,20}$/,
+            pattern: /^(?!.*\s.*\s)[a-zA-Z ]{3,20}$/,
           })}
           />
           {errors.name  && (
