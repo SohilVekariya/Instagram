@@ -5,11 +5,11 @@ const Home = () => {
   return (
     <div>
     <SideNavbar/>
-    <CustomButton
+    {/* <CustomButton
               type="button"
               title="Log Out"
               className="text-sky-500 font-semibold"
-            />
+            /> */}
     </div>
   )
 }

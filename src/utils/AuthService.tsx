@@ -1,8 +1,7 @@
-import  Cookies from "js-cookie"
 import { jwtDecode } from "jwt-decode";
 
 export const decodeToken = () => {
-    const token = Cookies.get("token");
+    const token = localStorage.getItem('token');
     let finalDecodedToken = null;
     try {
       finalDecodedToken = token ? jwtDecode(token) : null;

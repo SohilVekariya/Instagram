@@ -73,7 +73,7 @@ const SignUp = () => {
       </div>
     </div>
     <div className="mb-12 "></div>
-      <div>
+      <div className="text-center">
         <LoginFooter />
       </div>
     </>

@@ -11,7 +11,7 @@ import { AllRoutes } from "../../constants/Routes";
 import { useState } from "react";
 import { ColorRing } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
-import {  login } from "../../redux/slices/AuthSlice";
+import {  login, useSelectorUserState } from "../../redux/slices/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../redux/store";
 import LoginFooter from "../../components/shared/LoginFooter";
@@ -24,7 +24,9 @@ export type FormInputs = {
 
 const Login = () => {
   const disPatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  const { isError,ErrorMessage  } = useSelectorUserState();
 
   const {
     register,
@@ -45,15 +47,11 @@ const Login = () => {
   };
 
   const onSubmit = async (data:object) => {
-    try{
       const res = await disPatch(login(data));
-      if (res.payload) {
-        navigate(AllRoutes.Home);
-      }
-    }
-    catch (error) {
-      console.error(console.log(error));
-    }
+      // console.log(res);
+      // if (res.payload) {
+      //   navigate(AllRoutes.Home);
+      // }
       
   };
   return (
@@ -137,6 +135,8 @@ const Login = () => {
             <div className="login__or">OR</div>
             <div className="login__dividor"></div>
           </div>
+
+          {isError && (<div className="alert text-rose-500">{ErrorMessage}</div>)}
 
           <div className="login__fb flex align-middle gap-2 justify-center">
             <div className="flex flex-col justify-center">

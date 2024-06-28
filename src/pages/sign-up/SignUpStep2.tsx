@@ -2,7 +2,10 @@ import "../login/login.css";
 import CustomButton from "../../components/shared/CustomButton";
 import { useForm,SubmitHandler, FieldValues } from "react-hook-form";
 import birthdayLogo from "../../assets/images/birthdayLogo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { login, signup, useSelectorUserState } from "../../redux/slices/AuthSlice";
 
 type SignUpStep2Props = {
   prevStep: () => void;
@@ -17,21 +20,43 @@ interface FormData {
 
 
 const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
+  const disPatch = useDispatch<AppDispatch>();
   const {
     register,
     handleSubmit,
     formState: { isValid },
   } = useForm();
 
+  const { isError,ErrorMessage,success  } = useSelectorUserState();
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit:  SubmitHandler<FieldValues> = async (data) => {
     const { year, month, date } = data as FormData;
     const formattedData = {
       dateOfBirth: `${year}-${month}-${date}`
     };
     console.log({...formData,...formattedData})
-  };
+    const Data = {...formData,...formattedData};
+    const registerData = {
+      name:Data.name,
+      userName: Data.userName,
+      dateOfBirth: Data.dateOfBirth,
+      emailOrMobile:Data.email,
+      password:Data.password
+    }
+    console.log(registerData);
+    const res = await disPatch(signup(registerData));
+    console.log(res)
 
+    if(res.payload.isSuccess){
+      const logindata = {
+        value :registerData.emailOrMobile,
+        password:registerData.password
+      }
+      const res2 = disPatch(login(logindata));
+    }
+  
+  };
+  
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [date, setDate] = useState(new Date().getDate());
   const [year, setYear] = useState(new Date().getFullYear());
@@ -96,31 +121,31 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
             {...register("month")}
             onChange={handleMonthChange}
           >
-            <option className="" value="1">
+            <option className="" value="01">
               January
             </option>
-            <option className="" value="2">
+            <option className="" value="02">
               February
             </option>
-            <option className="" value="3">
+            <option className="" value="03">
               March
             </option>
-            <option className="" value="4">
+            <option className="" value="04">
               April
             </option>
-            <option className="" value="5">
+            <option className="" value="05">
               May
             </option>
-            <option className="" value="6">
+            <option className="" value="06">
               June
             </option>
-            <option className="" value="7">
+            <option className="" value="07">
               July
             </option>
-            <option className="" value="8">
+            <option className="" value="08">
               August
             </option>
-            <option className="" value="9">
+            <option className="" value="09">
               September
             </option>
             <option className="" value="10">
@@ -182,6 +207,8 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
           )}
         </div> */}
       </div>
+
+      {isError && (<div className="alert text-rose-500 mb-4">{ErrorMessage}</div>)}
       <div className="pb-4 text-gray-600">
         You need to enter the date you were born
       </div>

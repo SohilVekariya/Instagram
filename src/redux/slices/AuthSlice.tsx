@@ -4,35 +4,69 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 export interface AuthState {
-  isLoading: boolean;
   isLoggedIn: boolean;
-  user: object | LoginResponse | null; // Replace 'any' with the expected type of your response data
-  error:string | null;
+  token:string;
+  user: object ; // Replace 'any' with the expected type of your response data
+  ErrorMessage:string ;
+  isError:boolean;
+  isloading:boolean;
+  success:boolean;
 }
 
 const initialState: AuthState = {
-  isLoading: false,
   isLoggedIn: false,
+  token: localStorage.getItem("login") ?? '',
   user: {},
-  error:null,
+  ErrorMessage:'',
+  isError:false,
+  isloading:false,
+  success:false
 };
 
 export interface LoginResponse {
-  success: boolean;
+  IsSuccess: boolean
+  user:object
 }
 
 export const login = createAsyncThunk<
   LoginResponse,
   object,
   { rejectValue: string }
->("/auth/login", async (userCredentials) => {
-    const request = await axiosInstance.post("/auth/login", userCredentials);
-    const response = await request.data.data;
-    console.log(request);
-    console.log(response);
-    localStorage.setItem('user',JSON.stringify(response))
-    return response;
+>("/auth/login", async (data,thunkAPI) => {
+  try{
+    const response = await axiosInstance.post("/Auth/Login", data);
+    if (response.status >= 200 && response.status < 300) {
+             return response.data;
+         } else {
+             return thunkAPI.rejectWithValue(await response.data);
+         }
+  }
+  catch (error) {
+    if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data);
+    } else {
+        return thunkAPI.rejectWithValue({ message: error.message });
+    }
+}
 });
+
+export const signup = createAsyncThunk("/auth/signup",async (data, thunkAPI) => {
+  try{
+    const response = await axiosInstance.post("/Auth/Register", data);
+    if (response.status >= 200 && response.status < 300) {
+             return response.data;
+         } else {
+             return thunkAPI.rejectWithValue(await response.data);
+         }
+  }
+  catch (error) {
+    if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data);
+    } else {
+        return thunkAPI.rejectWithValue({ message: error.message });
+    }
+}
+})
 
 // export const logout = createAsyncThunk("/auth/logout", async (data) => {
 //   const res = promiseToaster(
@@ -46,29 +80,53 @@ export const login = createAsyncThunk<
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logout(state) {
+      state.isLoggedIn = false;
+  },
+  },
   extraReducers: (builder) => {
     builder
-    .addCase(login.pending, (state) => {
-      state.isLoading = true;
-    })
     .addCase(login.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isLoggedIn = action?.payload?.success;
-      state.user = action?.payload;
-      state.error = null;
+      state.isLoggedIn = true;
+      state.isError = false;
+      state.ErrorMessage = '';
+      state.token = action.payload.data.token;
+      state.isloading = false
+      localStorage.setItem("token",state.token)
     })
+  //   .addCase(login.pending, (state, action) => {
+  //     state.isloading = true;
+  // })
     .addCase(login.rejected,(state,action) => {
-      state.isLoading = false;
-      state.user = null;
-      console.log(action.error.message);
-      state.error = `${action.error.message}`
+      state.isLoggedIn = false;
+      state.ErrorMessage = action.payload.message;
+      state.success = false
+      state.isError =true
+      state.isloading = false
+      state.user = {}
       ;
     })
+  //   .addCase(signup.pending, (state, action) => {
+  //     state.isloading = true;
+  // })
+  .addCase(signup.rejected, (state, action) => {
+      state.isLoggedIn = false;
+      state.user = {};
+      state.ErrorMessage = action.payload.data[0].message;
+      state.success = false;
+      state.isError = true;
+      state.isloading = false;
+  })
+  .addCase(signup.fulfilled, (state, action) => {
+      state.success = true;
+      state.isloading = false;
+  })
   },
 });
 
-// export const {} = authSlice.actions;
+
+export const {logout} = authSlice.actions;
 export const useSelectorUserState = () => {
   const userState = useSelector((state: RootState) => state.auth);
   return userState;
