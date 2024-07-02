@@ -1,6 +1,14 @@
 export const AllRoutes = {
-    Login: "/",
+    Login: "/login",
     SignUp: "/signup",
     Reset: "/reset",
-    Home:"/home"
+    ResetLink: "/resetlink",
+    Home:"/home",
+    Search:"/search",
+    Explore:"/explore",
+    Reels:"/reels",
+    Messages:"/messages",
+    Notifications:"/notifications",
+    Create:"/create",
+    Profile:"/profile"
   };

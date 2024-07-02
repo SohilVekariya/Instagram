@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { login, signup, useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { useNavigate } from "react-router-dom";
+import { AllRoutes } from "../../constants/Routes";
 
 type SignUpStep2Props = {
   prevStep: () => void;
@@ -20,6 +22,7 @@ interface FormData {
 
 
 const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
+  const navigate = useNavigate();
   const disPatch = useDispatch<AppDispatch>();
   const {
     register,
@@ -34,31 +37,29 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
     const formattedData = {
       dateOfBirth: `${year}-${month}-${date}`
     };
-    console.log({...formData,...formattedData})
     const Data = {...formData,...formattedData};
     const registerData = {
-      name:Data.name,
+      name: Data.name ,
       userName: Data.userName,
       dateOfBirth: Data.dateOfBirth,
-      emailOrMobile:Data.email,
+      email:Data.email,
+      mobile:Data.phoneNo,
       password:Data.password
     }
-    console.log(registerData);
     const res = await disPatch(signup(registerData));
-    console.log(res)
 
-    if(res.payload.isSuccess){
+    if(success){
       const logindata = {
-        value :registerData.emailOrMobile,
+        value :registerData.email,
         password:registerData.password
       }
-      const res2 = disPatch(login(logindata));
+      const res2 = await disPatch(login(logindata));
     }
   
   };
   
   const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [date, setDate] = useState(new Date().getDate());
+  const [date, setDate] = useState(new Date().getDate().toString().padStart(2,'0'));
   const [year, setYear] = useState(new Date().getFullYear());
 
   const getDaysInMonth = (month: number, year: number) => {
@@ -88,7 +89,8 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setDate(parseInt(event.target.value));
+    setDate(event.target.value);
+    console.log(event.target.value);
   };
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -103,7 +105,7 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
       <div className="flex justify-center pt-7 pb-4 ">
         <img src={birthdayLogo} alt="" width={250} className="mx-auto" draggable="false" />
       </div>
-      <div className="text-black font-semibold text-lg mb-3">
+      <div className="text-black font-semibold text-lg mb-3 text-center">
         Add Your Birthday
       </div>
       <div className="text-center mb-4 ">
@@ -167,11 +169,17 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
             {...register("date")}
             onChange={handleDateChange}
           >
-            {days.map((day) => (
-              <option key={day} value={day}>
-                {day}
+            {days.map((day) => {
+              let day1 = day.toString();
+              if(day > 0 && day < 10 ){
+                day1 = "0" + day
+              }
+              return (
+              <option key={day1} value={day1}>
+                {day1}
               </option>
-            ))}
+              )
+})}
           </select>
         </div>
         <div className="rounded border-2">
@@ -208,7 +216,7 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
         </div> */}
       </div>
 
-      {isError && (<div className="alert text-rose-500 mb-4">{ErrorMessage}</div>)}
+      {isError && (<div className="text-center text-rose-500 mb-4">{ErrorMessage}</div>)}
       <div className="pb-4 text-gray-600">
         You need to enter the date you were born
       </div>
@@ -226,7 +234,7 @@ const SignUpStep2 = ({ prevStep, formData }: SignUpStep2Props) => {
       <CustomButton
         type="button"
         title="Go back"
-        className="text-sky-500 font-semibold mb-7"
+        className="text-sky-500 font-semibold mb-7 text-center w-full"
         route=""
         clickHandler={prevStep}
       />

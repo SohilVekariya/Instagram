@@ -1,16 +1,14 @@
 import { SideNavbar } from "../../components/SideNavbar/SideNavbar"
 import CustomButton from "../../components/shared/CustomButton"
+import HomeLayout from "../../layouts/HomeLayout"
 
 const Home = () => {
   return (
-    <div>
-    <SideNavbar/>
-    {/* <CustomButton
-              type="button"
-              title="Log Out"
-              className="text-sky-500 font-semibold"
-            /> */}
-    </div>
+    <HomeLayout>
+      <div className="">
+        Home
+      </div>
+    </HomeLayout>
   )
 }
 

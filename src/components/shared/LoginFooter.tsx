@@ -17,7 +17,7 @@ const LoginFooter = () => {
         <a href="https://about.meta.com/"> &nbsp;&nbsp;Threads</a>
         <a href="https://about.meta.com/"> &nbsp;&nbsp;Contact Uploading & Non-Users &nbsp;&nbsp; Meta Verified</a>
       </div>
-      <div className="text-neutral-400">&#169; 2024 Instgram from Meta</div>
+      <div className="text-neutral-400 text-center">&#169; 2024 Instgram from Meta</div>
     </React.Fragment>
   );
 };

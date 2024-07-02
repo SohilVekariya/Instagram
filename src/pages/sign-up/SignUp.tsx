@@ -15,6 +15,7 @@ const SignUp = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     email: '',
+    phoneNo:'',
     name:'',
     userName:'',
     password:'',

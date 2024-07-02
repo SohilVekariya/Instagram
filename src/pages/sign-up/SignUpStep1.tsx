@@ -5,6 +5,9 @@ import instaLogo from "../../assets/images/logoinsta.png";
 import CustomButton from "../../components/shared/CustomButton";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { unique,uniqueEmail,useSelectorUserState } from "../../redux/slices/AuthSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 
 type SignUpStep1Props ={
     nextStep:any
@@ -15,12 +18,15 @@ type FormInputs = {
   name: string;
   userName: string;
   email: string;
+  phoneNo:string;
   password: string;
 };
 
 
 
 const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
+  const disPatch = useDispatch<AppDispatch>()
+  const { isError,ErrorMessage  } = useSelectorUserState();
   const {
     register,
     control,
@@ -43,6 +49,15 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
   const onSubmit = (data: FormInputs) => {
     nextStep(data);
   };
+
+
+  const isUniqueUserName = (e : any) => {
+    const res = disPatch(unique(e.target.value));
+  } 
+
+  const isUniqueEmail = (e : any) => {
+    const res = disPatch(uniqueEmail(e.target.value));
+  } 
 
   return (
     <form
@@ -69,15 +84,19 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
       </div>
       <div className="text-center">
         <CustomInput
-          label="Mobile Number or email"
-          placeholder=""
+          label="email"
+          placeholder="Ex: johndoe@gmail.com"
           control={control}
           type="text"
           className=""
+          onInputBlur={isUniqueEmail}
           value={formData.email}
           {...register("email", {
             required: true,
-            pattern: /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9})$/,
+            // pattern: /^[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+            pattern: /^[a-z\d\-\.]+@([a-z\d-]+\.)+[a-z\d-]{2,4}$/,
+
+            
           })}
           />
           {errors.email  && (
@@ -86,8 +105,27 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
       </div>
       <div className="text-center mt-2">
         <CustomInput
-          label="FullName"
+          label="Phone No"
           placeholder=""
+          control={control}
+          onInputBlur={isUniqueEmail}
+          type="text"
+          className=""
+          // onInputBlur={isUniqueEmail}
+          value={formData.phoneNo}
+          {...register("phoneNo", {
+            required: false,
+            pattern: /^[6-9]\d{9}$/,
+          })}
+          />
+          {errors.phoneNo  && (
+            <p className="text-left text-rose-500" role="alert">Invalid Phone Number</p>
+          )}
+      </div>
+      <div className="text-center mt-2">
+        <CustomInput
+          label="FullName"
+          placeholder="Ex: John Doe"
           control={control}
           type="text"
           className=""
@@ -104,10 +142,11 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
       <div className="text-center mt-2">
         <CustomInput
           label="Username"
-          placeholder=""
+          placeholder="Ex: john123"
           control={control}
           type="text"
           className=""
+          onInputBlur={isUniqueUserName}
           value={formData.userName}
           {...register("userName", {
             required: true,
@@ -118,6 +157,7 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
         {errors.userName  && (
         <p className="text-left text-rose-500" role="alert">Invalid UserName</p>
       )}
+       
       </div>
       {/* <div className="text-left ps-12">
             {errors.userName && <span className="text-red-500">username length is between 3 to 20 characters and does not contain space</span>}
@@ -125,7 +165,7 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
       <div className="text-center mt-2 relative">
         <CustomInput
           label="Password"
-          placeholder=""
+          placeholder="Ex: John@123"
           control={control}
           onKeyUp={handlePasswordChange}
           type={showPassword ? "text" : "password"}
@@ -148,7 +188,10 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
           </button>
         )}
       </div>
-      <div className="py-4 text-gray-400">
+
+      {isError && (<div className="text-center text-rose-500 mt-4">{ErrorMessage}</div>)}
+
+      <div className="py-4 text-gray-400 text-center">
         People who use our service may have uploaded your contact information to
         Instagram{" "}
         <a
@@ -158,7 +201,7 @@ const SignUpStep1 = ({nextStep,formData} : SignUpStep1Props) => {
           Learn More
         </a>
       </div>
-      <div className="py-4 text-gray-400">
+      <div className="py-4 text-gray-400 text-center">
         By signing up,you agree to our{" "}
         <a
           href="https://help.instagram.com/581066165581870/?locale=en_US"

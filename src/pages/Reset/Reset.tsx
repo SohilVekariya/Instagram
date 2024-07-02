@@ -3,12 +3,16 @@ import CustomInput from "../../components/shared/CustomInput";
 import CustomButton from "../../components/shared/CustomButton";
 import { useForm } from "react-hook-form";
 import { IoLockClosedOutline } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { reset, useSelectorUserState } from "../../redux/slices/AuthSlice";
 
 type FormInputs = {
   email: string
 }
 
-const Reset = () => {
+const Reset = ({}) => {
+  const disPatch = useDispatch<AppDispatch>();
+  const { isError,ErrorMessage,SuccessMessage,success } = useSelectorUserState();
   const {
     register,
     control,
@@ -17,7 +21,11 @@ const Reset = () => {
   } = useForm<FormInputs>({mode:'onChange'});
 
   const onSubmit = (data: FormInputs) => {
-    console.log(data); 
+    const FormData = {
+      value: data.email,
+      link: "https://da73-14-99-103-154.ngrok-free.app/resetlink"
+    }
+    const res = disPatch(reset(FormData));
   };
   return (
     <div className="flex justify-center am:mt-12">
@@ -28,7 +36,7 @@ const Reset = () => {
               <IoLockClosedOutline className="text-9xl p-3"/>
             </div>
           </div>
-          <div className="font-semibold text-lg">Trouble logging in?</div>
+          <div className="font-semibold text-lg text-center">Trouble logging in?</div>
           <div className="py-3 text-gray-400 ">
             Enter your email,phone, or username and We'll send you a link to get back into your account
           </div>
@@ -41,11 +49,14 @@ const Reset = () => {
               control={control}
               disabled={false}
               className=""
-              {...register("email", { required: true, pattern: /^(?:[\w\-\.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/})}
+              {...register("email", { required: true, pattern: /^(?:[a-z\d\-\.]+@([a-z\d-]+\.)+[a-z\d-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/})}
             />
             {errors.email  && (
-            <p className="text-left text-rose-500" role="alert">Invalid name</p>
+            <p className="text-left text-rose-500" role="alert">Invalid Email</p>
           )}
+          {isError && (<div className="alert text-rose-500">{ErrorMessage}</div>)}
+          {success && (<div className="alert text-green-600">{SuccessMessage}</div>)}
+
           </div>
           <div className="flex justify-center mt-2">
             <CustomButton
@@ -56,7 +67,7 @@ const Reset = () => {
               disable={!isValid}
             />
           </div>
-          <div className="text-slate-900 mt-2 mb-7">
+          <div className="text-slate-900 mt-2 mb-7 text-center">
             can't reset your password?
           </div>
 
@@ -68,7 +79,7 @@ const Reset = () => {
             <CustomButton
               type="submit"
               title="Create new account"
-              className="font-semibold mt-3 mb-12 pb-12"
+              className="font-semibold mt-3 mb-12 pb-12 text-center w-full"
               route="/signup"
             />
         </div>

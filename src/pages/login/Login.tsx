@@ -12,7 +12,6 @@ import { useState } from "react";
 import { ColorRing } from "react-loader-spinner";
 import { useDispatch } from "react-redux";
 import {  login, useSelectorUserState } from "../../redux/slices/AuthSlice";
-import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../redux/store";
 import LoginFooter from "../../components/shared/LoginFooter";
 
@@ -48,11 +47,7 @@ const Login = () => {
 
   const onSubmit = async (data:object) => {
       const res = await disPatch(login(data));
-      // console.log(res);
-      // if (res.payload) {
-      //   navigate(AllRoutes.Home);
-      // }
-      
+
   };
   return (
     <div className="flex justify-center sm:mt-12 ">
@@ -65,7 +60,7 @@ const Login = () => {
           <div className="text-center">
             <CustomInput
               label="Phone number,username, or email"
-              placeholder="Phone number,username, or email"
+              placeholder=""
               // name="email"
               type="text"
               control={control}
@@ -73,7 +68,7 @@ const Login = () => {
               {...register("value", {
                 required: true,
                 pattern:
-                  /^(?:[\w\-.]+@([\w-]+\.)+[\w-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
+                  /^(?:[a-z\d\-\.]+@([a-z\d-]+\.)+[a-z\d-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/,
               })}
             />
             {errors.value  && (
@@ -84,7 +79,7 @@ const Login = () => {
           <div className="text-center mt-2 relative">
             <CustomInput
               label="Password"
-              placeholder=""
+              placeholder="Ex: John@123"
               type={showPassword ? "text" : "password"}
               control={control}
               onKeyUp={handlePasswordChange}
@@ -136,7 +131,7 @@ const Login = () => {
             <div className="login__dividor"></div>
           </div>
 
-          {isError && (<div className="alert text-rose-500">{ErrorMessage}</div>)}
+          {isError && (<div className="text-center text-rose-500">{ErrorMessage}</div>)}
 
           <div className="login__fb flex align-middle gap-2 justify-center">
             <div className="flex flex-col justify-center">
@@ -147,7 +142,7 @@ const Login = () => {
           <CustomButton
             type="button"
             title="Forgot password?"
-            className="login_forgt text-center my-7"
+            className="login_forgt text-center w-full my-7"
             route={AllRoutes.Reset}
           />
         </div>
