@@ -133,11 +133,33 @@ export const unique = createAsyncThunk(
 );
 
 export const uniqueEmail = createAsyncThunk(
-  "/auth/IsUniqueEmailOrMobile",
+  "/auth/IsUniqueEmail",
   async (data, thunkAPI) => {
     try {
       const response = await axiosInstance.get(
-        `/Auth/IsUniqueEmailOrMobile?emailOrMobile=${data}`
+        `/Auth/IsUniqueEmail?email=${data}`
+      );
+      if (response.status >= 200 && response.status < 300) {
+        return response.data;
+      } else {
+        return thunkAPI.rejectWithValue(await response.data);
+      }
+    } catch (error) {
+      if (error.response) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      } else {
+        return thunkAPI.rejectWithValue({ message: error.message });
+      }
+    }
+  }
+);
+
+export const uniqueMobile = createAsyncThunk(
+  "/auth/IsUniqueMobile",
+  async (data, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(
+        `/Auth/IsUniqueMobile?mobile=${data}`
       );
       if (response.status >= 200 && response.status < 300) {
         return response.data;
@@ -217,6 +239,13 @@ const authSlice = createSlice({
         state.success = true;
       })
       .addCase(uniqueEmail.rejected, (state, action) => {
+        state.isError = true;
+        state.ErrorMessage = action.payload.message;
+      })
+      .addCase(uniqueMobile.fulfilled, (state, action) => {
+        state.success = true;
+      })
+      .addCase(uniqueMobile.rejected, (state, action) => {
         state.isError = true;
         state.ErrorMessage = action.payload.message;
       })

@@ -1,4 +1,4 @@
-import React, { Children, useEffect } from "react";
+import React, { Children, useEffect, useState } from "react";
 import HomeLayout from "../../layouts/HomeLayout";
 import { LuBadge } from "react-icons/lu";
 import { PiBookmarkSimpleLight } from "react-icons/pi";
@@ -9,24 +9,19 @@ import { AllRoutes } from "../../constants/Routes";
 import Posts from "./Posts";
 import Saved from "./Saved";
 import Tagged from "./Tagged";
+import {useSelectorProfileState } from "../../redux/slices/ProfileSlice";
+import profiledemo from "../../assets/images/profiledemo.jpg"
 import { decodeToken } from "../../utils/AuthService";
-import { useDispatch } from "react-redux";
-import { getProfilePicture } from "../../redux/slices/ProfileSlice";
+import EditProfile from "./EditProfile";
+import { useSelectorUserState } from "../../redux/slices/AuthSlice";
 
 export const Profile = () => {
-  const disPatch = useDispatch<AppDispatch>();
   let { tab } = useParams();
-  const userData = decodeToken();
-
-  useEffect(() => {
-    const res = disPatch(getProfilePicture(userData.UserId));
-  }, []);
-
-
  
+  const {success, profilePicture} = useSelectorProfileState();
+  const userData = decodeToken();
+  console.log(userData);
 
-
-  
   if (!tab) {
     tab = 'posts';
   }
@@ -36,7 +31,7 @@ export const Profile = () => {
         <div className="part__1 flex px-9 gap-12 mt-5">
           <div className="profile__image px-12">
             <img
-              src="https://www.corporatephotographerslondon.com/wp-content/uploads/2021/06/D4S5608-1.jpg"
+              src={success ? profilePicture : profiledemo}
               alt=""
               width={200}
               className="rounded-full"
@@ -44,10 +39,10 @@ export const Profile = () => {
           </div>
           <div className="profile__content flex flex-col gap-3">
             <div className="flex gap-3 items-center">
-              <div className="text-lg">thesohilvekariya</div>
-              <button className="bg-zinc-100 px-3 py-1 rounded-md font-semibold">
+              <div className="text-lg">{userData.UserName}</div>
+              <Link to={AllRoutes.EditProfile} className="bg-zinc-100 px-3 py-1 rounded-md font-semibold">
                 Edit profile
-              </button>
+              </Link>
               <button className="bg-zinc-100 px-3 py-1 rounded-md font-semibold">
                 View archive
               </button>
@@ -69,7 +64,7 @@ export const Profile = () => {
               </button>
             </div>
             <div className="fullname__Bio">
-              <div className="fullname font-semibold">Sohil Vekariya</div>
+              <div className="fullname font-semibold">{userData.Name}</div>
               <div className="bio flex flex-col">
                 <p>LDCE_24</p>
                 <p>It Engineering</p>

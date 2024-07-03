@@ -51,9 +51,13 @@ const Reset = ({}) => {
               className=""
               {...register("email", { required: true, pattern: /^(?:[a-z\d\-\.]+@([a-z\d-]+\.)+[a-z\d-]{2,4}|[6-9]\d{9}|[a-z][a-z0-9_]{4,19})$/})}
             />
-            {errors.email  && (
-            <p className="text-left text-rose-500" role="alert">Invalid Email</p>
-          )}
+            {errors.email && (
+              <p className="text-left text-rose-500" role="alert">
+                {errors.email.type === "pattern"
+                  ? "Invalid Mobile Number,userName or email"
+                  : ""}
+              </p>
+            )}
           {isError && (<div className="alert text-rose-500">{ErrorMessage}</div>)}
           {success && (<div className="alert text-green-600">{SuccessMessage}</div>)}
 

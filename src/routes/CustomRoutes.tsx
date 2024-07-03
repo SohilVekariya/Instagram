@@ -12,6 +12,7 @@ import Reels from "../pages/reels/Reels";
 import Messages from "../pages/messages/Messages";
 import Notifications from "../pages/notifications/Notifications";
 import Create from "../pages/create/Create";
+import EditProfile from "../pages/profile/EditProfile";
 
 export const AuthRoutes = () => {
   return (
@@ -36,6 +37,7 @@ export const NormalRoutes = () => {
       <Route path={AllRoutes.Notifications} element={<Notifications />}></Route>
       <Route path={AllRoutes.Create} element={<Create />}></Route>
       <Route path={AllRoutes.Profile} element={<Profile />}></Route>
+      <Route path={AllRoutes.EditProfile} element={<EditProfile />}></Route>
       <Route path="/profile/:tab" element={<Profile />} />
 
       <Route path="/*" element={<Navigate to={AllRoutes.Home} />} />

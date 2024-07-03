@@ -1,3 +1,5 @@
+import EditProfile from "../pages/profile/EditProfile";
+
 export const AllRoutes = {
     Login: "/login",
     SignUp: "/signup",
@@ -10,5 +12,6 @@ export const AllRoutes = {
     Messages:"/messages",
     Notifications:"/notifications",
     Create:"/create",
-    Profile:"/profile"
+    Profile:"/profile",
+    EditProfile:"/profile/edit"
   };
